@@ -1,0 +1,40 @@
+name: Sort Domains
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "domain_list.json"
+  workflow_dispatch:
+
+jobs:
+  update-repository:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: sergeysova/jq-action@v2
+
+      - name: Sort domain_list.json
+        continue-on-error: false
+        run: "jq '.domains |= (sort | unique)' domain_list.json > tmp_domain_list.json && mv tmp_domain_list.json domain_list.json"
+
+      - name: Commit files
+        continue-on-error: true
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git add .
+          git commit -m "style: automatically sorted domains list" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        continue-on-error: true
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main

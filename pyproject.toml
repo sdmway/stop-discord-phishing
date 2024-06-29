@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "stop-discord-phishing"
+version = "1.0.0"
+description = ""
+authors = ["sdmway <github@sdmway.tech>"]
+readme = "README.md"
+packages = [{ include = "stop_discord_phishing" }]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+aiohttp = { version = "^3.8.0", extras = ["speedups"] }
+cachetools = "^5.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
